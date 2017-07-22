@@ -1,0 +1,9 @@
+body {
+	width: 1040px;
+	margin: 0 auto 100px auto;
+}
+
+#header-wrapper {
+	padding-top: 10px;
+	width: 1040px;
+}
