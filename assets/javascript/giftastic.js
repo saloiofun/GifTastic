@@ -1,11 +1,12 @@
 $(document).ready(function() {
 
 	var gifButtons = ["meme", "Reactions", "Bruce Lee"];
+	const APIKEY = "3703fe99db3742bf9c7915cad1d54adc";
 
 	var renderGifButtons = function() {
 		$("#gif-buttons").empty();
 		for (var i = 0; i < gifButtons.length; i++) {
-			var button = $("<button class=\"gif-btns\">").attr("data-name", gifButtons[i]).text(gifButtons[i]);
+			var button = $("<button type=\"button\" class=\"gif-btns btn btn-primary\">").attr("data-name", gifButtons[i]).text(gifButtons[i]);
 			$("#gif-buttons").append(button);
 		}
 	}
@@ -21,22 +22,19 @@ $(document).ready(function() {
 		}
 	}
 
-	var renderGifs = function(input) {
-		$("#gif-container").empty();
-		var apiKey = "3703fe99db3742bf9c7915cad1d54adc";
-		var queryURL = "http://api.giphy.com/v1/gifs/";
-		queryURL += 'search?' + $.param({
-			'api_key': apiKey,
-			'q' : input
-		});
-
+	var ajaxCall = function(queryURL) {
 		$.ajax({
 			url: queryURL,
 			method: "GET"
 		}).done(function(response) {
 			var result = response.data;
-			for (var i = 0; i < 5; i++) {
-				var gifContainer = $("<div class=\"gif-container\">");
+			var $grid = $('.grid').masonry({
+				itemSelector: '.grid-item',
+				fitWidth: true,
+				gutter: 10
+			});
+			for (var i = 0; i < result.length; i++) {
+				var gifItem = $("<div class=\"grid-item\">");
 
 				var gif = $("<img class=\"gif\">").attr("src", result[i].images.fixed_width_still.url).attr("data-status", "still");
 				gif.attr("data-still", result[i].images.fixed_width_still.url);
@@ -44,11 +42,26 @@ $(document).ready(function() {
 
 				var rating = $("<p>").text("Rating: " + result[i].rating);
 
-				gifContainer.append(gif);
-				gifContainer.append(rating);
-				$("#gif-container").append(gifContainer);
+				gifItem.append(gif);
+				gifItem.append(rating);
+				$("#gif-container").append(gifItem).masonry( 'appended', gifItem );;
 			}
+
+			$grid.imagesLoaded().progress( function() {
+				$grid.masonry('layout');
+			});
 		});
+	}
+
+	var renderSearchGifs = function(input) {
+		$("#gif-container").empty();
+		var queryURL = "http://api.giphy.com/v1/gifs/";
+		queryURL += 'search?' + $.param({
+			'api_key': APIKEY,
+			'q' : input
+		});
+
+		ajaxCall(queryURL);
 	}
 
 	$("#search-submit").on("click", function(event) {
@@ -56,16 +69,25 @@ $(document).ready(function() {
 		input = $("#search-input").val().trim();
 		gifButtons.push(input);
 		renderGifButtons();
-		renderGifs(input);
+		renderSearchGifs(input);
 	});
 
 	$(document).on("click", ".gif", toggleAnimation);
 
+	$(document).on("click", "#trending", function () {
+		$("#gif-container").empty();
+		var queryURL = "http://api.giphy.com/v1/gifs/";
+		queryURL += 'trending?' + $.param({
+			'api_key': APIKEY
+		});
+
+		ajaxCall(queryURL);
+	});
+
 	$(document).on("click", ".gif-btns", function () {
 		var input = $(this).attr("data-name");
-		renderGifs(input);
+		renderSearchGifs(input);
 	});
 
 	renderGifButtons();
-
 });
