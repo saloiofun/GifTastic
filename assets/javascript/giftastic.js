@@ -56,7 +56,7 @@ $(document).ready(function() {
 
 	var renderSearchGifs = function(input) {
 		$("#gif-container").empty();
-		var queryURL = "http://api.giphy.com/v1/gifs/";
+		var queryURL = "https://api.giphy.com/v1/gifs/";
 		queryURL += 'search?' + $.param({
 			'api_key': APIKEY,
 			'q' : input
