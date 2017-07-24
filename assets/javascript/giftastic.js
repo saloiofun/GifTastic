@@ -77,7 +77,7 @@ $(document).ready(function() {
 
 	$(document).on("click", "#trending", function () {
 		$("#gif-container").empty();
-		var queryURL = "http://api.giphy.com/v1/gifs/";
+		var queryURL = "https://api.giphy.com/v1/gifs/";
 		queryURL += 'trending?' + $.param({
 			'api_key': APIKEY
 		});
