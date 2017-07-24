@@ -30,8 +30,9 @@ $(document).ready(function() {
 			var result = response.data;
 			var $grid = $('.grid').masonry({
 				itemSelector: '.grid-item',
-				fitWidth: true,
-				gutter: 10
+				columnWidth: 200,
+				gutter: 10,
+				fitWidth: true
 			});
 			for (var i = 0; i < result.length; i++) {
 				var gifItem = $("<div class=\"grid-item\">");
