@@ -6,7 +6,6 @@ $(document).ready(function() {
 
 	var renderGifButtons = function() {
 		$("#gif-buttons").empty();
-
 		for (var i = 0; i < gifButtons.length; i++) {
 			var index = Math.floor((Math.random() * btnsTypes.length));
 			var button = $("<button type=\"button\" class=\"btn " + btnsTypes[index] + " gif-btns\">").attr("data-name", gifButtons[i]).text(gifButtons[i]);
@@ -39,18 +38,16 @@ $(document).ready(function() {
 			});
 			for (var i = 0; i < result.length; i++) {
 				var gifItem = $("<div class=\"grid-item text-right\">");
-
 				var gif = $("<img class=\"gif\">").attr("src", result[i].images.fixed_width_still.url).attr("data-status", "still");
 				gif.attr("data-still", result[i].images.fixed_width_still.url);
 				gif.attr("data-animate", result[i].images.fixed_width.url);
-
+				var gifUrl = $("<span class=\"badge badge-info gif-url\" data-clipboard-text=\" " + result[i].images.fixed_width.url + "\"><i class=\"fa fa-link\" aria-hidden=\"true\"></i> Link</span>");
 				var rating = $("<span class=\"badge badge-default\">Rating: " + "<span class=\"text-uppercase\">" + result[i].rating + "</span></span>");
-
 				gifItem.append(gif);
+				gifItem.append(gifUrl);
 				gifItem.append(rating);
 				$("#gif-container").append(gifItem).masonry( 'appended', gifItem );;
 			}
-
 			$grid.imagesLoaded().progress( function() {
 				$grid.masonry('layout');
 			});
@@ -64,7 +61,6 @@ $(document).ready(function() {
 			'api_key': APIKEY,
 			'q' : input
 		});
-
 		ajaxCall(queryURL);
 	}
 
@@ -75,7 +71,6 @@ $(document).ready(function() {
 		queryURL += 'trending?' + $.param({
 			'api_key': APIKEY
 		});
-
 		ajaxCall(queryURL);
 	}
 
@@ -89,7 +84,20 @@ $(document).ready(function() {
 		} else {
 			renderTrending();
 		}
+	});	
 
+	$("#play").on("click", function() {
+		$(".gif").each(function () {
+			$(this).attr("src", $(this).attr("data-animate")) 
+			$(this).attr("data-status", "animate");
+		});
+	});
+
+	$("#stop").on("click", function() {
+		$(".gif").each(function () {
+			$(this).attr("src", $(this).attr("data-still")) 
+			$(this).attr("data-status", "still");
+		});
 	});
 
 	$(document).on("click", ".gif", toggleAnimation);
@@ -124,4 +132,34 @@ $(document).ready(function() {
 	renderGifButtons();
 
 	renderTrending();
+
+	// Tooltip
+
+	$('.gif-url').tooltip({
+		trigger: 'click',
+		placement: 'left'
+	});
+
+	function setTooltip(btn, message) {
+		btn.tooltip('hide')
+		.attr('data-original-title', message)
+		.tooltip('show');
+	}
+
+	function hideTooltip(btn) {
+		setTimeout(function() {
+			btn.tooltip('hide');
+		}, 1000);
+	}
+
+	// Clipboard
+
+	var clipboard = new Clipboard('.gif-url');
+
+	clipboard.on('success', function(e) {
+		var btn = $(e.trigger);
+		setTooltip(btn, 'Copied!');
+		hideTooltip(btn);
+	});
+
 });

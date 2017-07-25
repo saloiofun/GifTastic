@@ -34,6 +34,13 @@ a {
 	color: #FFF;
 }
 
+.gif-control i {
+	color: orange;
+	font-size: 1.5em;
+	margin: 3px;
+	cursor: pointer;
+}
+
 .grid {
 	margin: 0 auto;
 }
@@ -47,4 +54,12 @@ a {
 .h-title {
 	color: white;
 	margin: 5px 0 15px 0;
+}
+
+.badge {
+	margin-left: 5px;
+}
+
+.gif-url {
+	cursor: pointer;
 }
