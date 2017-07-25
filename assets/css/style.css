@@ -1,8 +1,50 @@
 body {
-	background-color: #000;
-	color: #eee;
+	background: #35414c;
+	color: #000;
+	font-family: 'Raleway', sans-serif;
 }
+
+a {
+	color: white;
+}
+
+.btn:focus, .btn:hover {
+	cursor: pointer;
+}
+
+#search-input {
+	margin-bottom: 5px;
+}
+
+.gif-btns {
+	margin-top: 5px;
+}
+
+#gif-buttons button:nth-child(n+2) {
+	margin-left: 3px;
+}
+
+.nav-link:hover, .nav-link:focus {
+	color: orange;
+}
+
+#logo {
+	font-weight: 700;
+	font-size: 3em;
+	color: #FFF;
+}
+
 .grid {
 	margin: 0 auto;
 }
+
 .grid-item { width: 200px; margin-bottom: 10px; }
+
+.form-control { 
+	border: 1px solid white;
+}
+
+.h-title {
+	color: white;
+	margin: 5px 0 15px 0;
+}

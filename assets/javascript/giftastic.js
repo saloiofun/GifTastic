@@ -1,12 +1,15 @@
 $(document).ready(function() {
 
-	var gifButtons = ["meme", "Reactions", "Bruce Lee"];
+	var gifButtons = ["Luke Skywalker", "Yoda", "Boba Fett", "Chewbacca"];
+	var btnsTypes = ["btn-primary", "btn-secondary", "btn-success", "btn-info", "btn-warning", "btn-danger"]
 	const APIKEY = "3703fe99db3742bf9c7915cad1d54adc";
 
 	var renderGifButtons = function() {
 		$("#gif-buttons").empty();
+
 		for (var i = 0; i < gifButtons.length; i++) {
-			var button = $("<button type=\"button\" class=\"gif-btns btn btn-primary\">").attr("data-name", gifButtons[i]).text(gifButtons[i]);
+			var index = Math.floor((Math.random() * btnsTypes.length));
+			var button = $("<button type=\"button\" class=\"btn " + btnsTypes[index] + " gif-btns\">").attr("data-name", gifButtons[i]).text(gifButtons[i]);
 			$("#gif-buttons").append(button);
 		}
 	}
@@ -35,13 +38,13 @@ $(document).ready(function() {
 				fitWidth: true
 			});
 			for (var i = 0; i < result.length; i++) {
-				var gifItem = $("<div class=\"grid-item\">");
+				var gifItem = $("<div class=\"grid-item text-right\">");
 
 				var gif = $("<img class=\"gif\">").attr("src", result[i].images.fixed_width_still.url).attr("data-status", "still");
 				gif.attr("data-still", result[i].images.fixed_width_still.url);
 				gif.attr("data-animate", result[i].images.fixed_width.url);
 
-				var rating = $("<p>").text("Rating: " + result[i].rating);
+				var rating = $("<span class=\"badge badge-default\">Rating: " + "<span class=\"text-uppercase\">" + result[i].rating + "</span></span>");
 
 				gifItem.append(gif);
 				gifItem.append(rating);
@@ -65,17 +68,8 @@ $(document).ready(function() {
 		ajaxCall(queryURL);
 	}
 
-	$("#search-submit").on("click", function(event) {
-		event.preventDefault();
-		input = $("#search-input").val().trim();
-		gifButtons.push(input);
-		renderGifButtons();
-		renderSearchGifs(input);
-	});
-
-	$(document).on("click", ".gif", toggleAnimation);
-
-	$(document).on("click", "#trending", function () {
+	var renderTrending = function() {
+		$("#page-header").html("<h1 class=\"h-title\">Trending Now</h1>");
 		$("#gif-container").empty();
 		var queryURL = "https://api.giphy.com/v1/gifs/";
 		queryURL += 'trending?' + $.param({
@@ -83,12 +77,51 @@ $(document).ready(function() {
 		});
 
 		ajaxCall(queryURL);
+	}
+
+	$("#search-submit").on("click", function(event) {
+		event.preventDefault();
+		input = $("#search-input").val().trim();
+		if (input) {
+			gifButtons.push(input);
+			renderGifButtons();
+			renderSearchGifs(input);
+		} else {
+			renderTrending();
+		}
+
 	});
 
-	$(document).on("click", ".gif-btns", function () {
+	$(document).on("click", ".gif", toggleAnimation);
+
+	$(document).on("click", "#trending", renderTrending);
+
+	$(document).on("click", "#reactions", function() {
+		$("#page-header").html("<h1 class=\"h-title\">Reactions</h1>");
+		renderSearchGifs("Reactions");
+	});
+
+	$(document).on("click", "#entertainment", function() {
+		$("#page-header").html("<h1 class=\"h-title\">Entertainment</h1>");
+		renderSearchGifs("Entertainments gifs");
+	});
+
+	$(document).on("click", "#memes", function() {
+		$("#page-header").html("<h1 class=\"h-title\">Memes</h1>");
+		renderSearchGifs("Memes");
+	});
+
+	$(document).on("click", ".gif-btns", function() {
 		var input = $(this).attr("data-name");
+		$("#page-header").html("<h1 class=\"h-title text-capitalize\">" + input + "</h1>");
 		renderSearchGifs(input);
 	});
 
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
 	renderGifButtons();
+
+	renderTrending();
 });
