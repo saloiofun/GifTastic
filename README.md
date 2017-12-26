@@ -13,3 +13,13 @@ Link: https://saloiofun.github.io/GifTastic/
 * Click on any gif to start the animation.
 
 * Click on "Link" button to copy the URL.
+
+## Tools used
+
+* HTML 5
+* CSS
+* JavaScript
+* Jquery
+* GIPHY API
+* [Clipboard.js](https://zenorocha.github.io/clipboard.js)
+* [Masonry.js](https://masonry.desandro.com/)
