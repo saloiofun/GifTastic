@@ -20,6 +20,7 @@ Link: https://saloiofun.github.io/GifTastic/
 * CSS
 * JavaScript
 * Jquery
+* Bootstrap 4
 * GIPHY API
 * [Clipboard.js](https://zenorocha.github.io/clipboard.js)
 * [Masonry.js](https://masonry.desandro.com/)
